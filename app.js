@@ -10,7 +10,7 @@ import hpp from 'hpp';
 import AppError from './utils/appError.js';
 //import globalErrorHandler from './controllers/errorController.js';
 //import userRouter from './routes/userRoutes.js';
-//import taskRouter from './routes/taskRoutes.js';
+import appointmentRouter from './routes/taskRoutes.js';
 //import projectRouter from './routes/projectRoutes.js';
 //import { getAllUsers } from './controllers/userController.js';
 
@@ -54,7 +54,7 @@ app.use(
       'difficulty',
       'price',
     ],
-  }),
+  })
 );
 
 // Test middleware
@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-//app.use('/api/v1/tasks', taskRouter);
+app.use('/api/v1/appointments', taskRouter);
 //app.use('/api/v1/projects', projectRouter);
 //app.use('/api/v1/users', userRouter);
 

@@ -2,28 +2,23 @@ import { config } from 'dotenv';
 import app from './app.js';
 import mysql from 'mysql2';
 
-process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
-  process.exit(1);
-});
-
 config({ path: './config.env' });
 
-// Log that the script is starting...
-console.log('Starting server script...');
+console.log('Starting server...');
 
-// Connect to the database
-console.log('Connecting to the database...');
+let pool;
 
 async function connectToDB() {
   try {
-    mysql.createPool({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USERNAME,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-    });
+    pool = mysql
+      .createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USERNAME,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME,
+      })
+      .promise(); // Use promise-based pool for async/await compatibility
+
     console.log('DB connection successful! ✅');
 
     // Start the app after successful database connection
@@ -39,12 +34,12 @@ async function connectToDB() {
 
 connectToDB();
 
-// Log that the script has finished
 console.log('Server script finished execution.👀');
 
-// Handle unhandled rejections
 process.on('unhandledRejection', (err) => {
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
   console.log(err.name, err.message);
   process.exit(1);
 });
+
+export { pool };
